@@ -90,3 +90,45 @@ const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+// لە ناو server.js ئەم بەشە نوێ بکەوە:
+
+// لیستی کارتە کۆمیدییەکە (Kurdish Deck)
+const deckTemplate = [
+    { id: 1, text: "د. فەرهاد پیرباڵ", type: "card-farhad", power: 100 },
+    { id: 2, text: "نوێنەری قاعە", type: "card-nwenar", power: 50 },
+    { id: 3, text: "بەربانگی ئێوارە", type: "card-ramadan", power: 80 },
+    { id: 4, text: "کویزی کتوپڕ", type: "card-shame", power: -20 },
+    { id: 5, text: "غەیبەتی مامۆستا", type: "card-normal", power: 10 },
+    { id: 6, text: "ئینزیبات", type: "card-shame", power: -50 },
+    { id: 7, text: "خەوتن لە کۆتا ڕیز", type: "card-normal", power: 30 },
+    { id: 8, text: "نەمانی شەحنی مۆبایل", type: "card-shame", power: -10 },
+    { id: 9, text: "چای کافتریا", type: "card-normal", power: 5 },
+    { id: 10, text: "مەعاش هات", type: "card-ramadan", power: 90 },
+];
+
+function generateDeck() {
+    // کۆپی کردنی کارتەکان و تێکەڵکردنیان (Shuffle)
+    let deck = [];
+    for(let i=0; i<3; i++) { // سێ جار کارتەکان دووبارە دەبنەوە تا ژمارەیان زۆر بێت
+        deck = deck.concat(JSON.parse(JSON.stringify(deckTemplate)));
+    }
+    return deck.sort(() => Math.random() - 0.5); // Shuffle
+}
+
+function startGame(roomId) {
+    const room = rooms[roomId];
+    room.gameState = 'playing';
+    
+    // دابەشکردنی کارت بۆ هەر یاریزانێک (٥ کارت)
+    const gameDeck = generateDeck();
+    
+    room.players.forEach(player => {
+        // ٥ کارت دەدەین بە یاریزانەکە
+        player.hand = gameDeck.splice(0, 5); 
+        
+        // ناردنی کارتەکان تەنیا بۆ ئەو یاریزانە (کەس کارتەکانی ئەوی تر نەبینێت)
+        io.to(player.id).emit('dealCards', { hand: player.hand });
+    });
+
+    console.log(`Game started in room ${roomId}`);
+}
