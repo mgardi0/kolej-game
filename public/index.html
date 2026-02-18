@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>کۆلێژ کۆنترۆڵ | وەشانی ڕەمەزان</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rudaw&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div id="login-screen" class="screen active">
+        <div class="login-box">
+            <h1>🎓 مەهزەلەی کۆلێژ</h1>
+            <input type="text" id="username" placeholder="ناوەکەت بنووسە (مەلا، دکتۆر...)" maxlength="10">
+            
+            <div class="tabs">
+                <button onclick="showTab('create')" class="active-tab">دروستکردن</button>
+                <button onclick="showTab('join')">چوونە ژوور</button>
+            </div>
+
+            <div id="create-section" class="tab-content">
+                <input type="text" id="new-room-pass" placeholder="پاسۆردێک دابنێ">
+                <button class="btn-primary" onclick="createRoom()">🛠️ دروستکردنی ژوور</button>
+            </div>
+
+            <div id="join-section" class="tab-content" style="display:none;">
+                <input type="text" id="room-id-input" placeholder="ژمارەی ژوور (ID)">
+                <input type="text" id="room-pass-input" placeholder="پاسۆردی ژوور">
+                <button class="btn-secondary" onclick="joinRoom()">🚀 چوونە ژوور</button>
+            </div>
+            
+            <p id="status-msg"></p>
+        </div>
+    </div>
+
+    <div id="lobby-screen" class="screen">
+        <h2>ژووری چاوەڕوانی...</h2>
+        <div class="room-info">
+            <p>ژمارەی ژوور: <span id="display-room-id">...</span></p>
+        </div>
+        <div id="players-list">
+            </div>
+        <p class="waiting-text">چاوەڕوانی یاریزانەکانی ترین...</p>
+    </div>
+
+    <div id="game-screen" class="screen">
+        <div class="scene">
+            <div class="table">
+                <div class="table-texture">
+                    <img src="https://via.placeholder.com/100" alt="Logo" class="center-logo">
+                </div>
+
+                <div class="opponent opponent-top" id="p-top">
+                    <div class="avatar">👤</div>
+                    <span class="name">چاوەڕوانی...</span>
+                </div>
+                <div class="opponent opponent-left" id="p-left">
+                    <div class="avatar">👤</div>
+                    <span class="name">چاوەڕوانی...</span>
+                </div>
+                <div class="opponent opponent-right" id="p-right">
+                    <div class="avatar">👤</div>
+                    <span class="name">چاوەڕوانی...</span>
+                </div>
+
+                <div class="deck-area">
+                    <div class="card-stack"></div>
+                    <div class="played-card-slot" id="played-card-slot">
+                        </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="my-hand-container">
+            <div class="hand" id="my-hand">
+                </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="client.js"></script>
+</body>
+</html>
